@@ -30,58 +30,59 @@
         var x = (new Date()).getTime(); // current time
         series0.addPoint([x, _.find(data.bpi, {"code":"USD"}).rate_float + Math.random()], true, true);
         series1.addPoint([x, _.find(data.bpi, {"code":"GBP"}).rate_float + Math.random()], true, true);
-        series2.addPoint([x, _.find(data.bpi, {"code":"EUR"}).rate_float + Math.random()], true, true);
   });
    document.addEventListener("DOMContentLoaded", function(event) {
     socket.emit('messages', 'Im ready');
-    chart = Highcharts.stockChart('container', {
+    chart = Highcharts.chart('container', {
+    chart: {
+        type: 'spline',
+        animation: Highcharts.svg, // don't animate in old IE
+        marginRight: 10,
+    },
+
     time: {
-        useUTC: true
+        useUTC: false
     },
-    rangeSelector: {
-        buttons: [{
-            count: 1,
-            type: 'minute',
-            text: '1M'
-        }, {
-            count: 5,
-            type: 'minute',
-            text: '5M'
-        }],
-        inputEnabled: true,
-        selected: 1
-    },
+
     title: {
-        text: 'Bitcoin Price Index'
+        text: 'Live BTC price'
+    },
+    xAxis: {
+        type: 'datetime',
+        tickPixelInterval: 150
+    },
+    yAxis: {
+        title: {
+            text: 'Value'
+        },
+        plotLines: [{
+            value: 0,
+            width: 1,
+            color: '#808080'
+        },{
+            value: 1,
+            width: 1,
+            color: '#FF6347'
+        }]
+    },
+    tooltip: {
+        headerFormat: '<b>{series.name}</b><br/>',
+        pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}'
+    },
+    legend: {
+        enabled: false
     },
     exporting: {
         enabled: false
     },
-    yAxis: {
-        min: 0,
-        max: 12000,
-    },
-    xAxis: {
-        min: 2017,
-        max: 2018,
-    },
     series: [{
         name: 'USD',
-        data: (function () {
-            return [(new Date()).getTime(), 60];
-        }())
+        data: [(new Date()).getTime(), 0]
     },{
         name: 'GBP',
-        data: (function () {
-            return [(new Date()).getTime(), 60];
-        }())
-    },{
-        name: 'EUR',
-        data: (function () {
-            return [(new Date()).getTime(), 60];
-        }())
+        data: [(new Date()).getTime(), 0]
     }]
-});
+    });  
   });
 
 </script>
