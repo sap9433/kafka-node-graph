@@ -1,17 +1,18 @@
 <!doctype html>
 <html lang="en">
     <head>
-
+        <title> Bitcoin Index</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <div id="future"></div>
-        <form id="form" id="chat_form">
-            <input id="chat_input" type="text">
-            <input type="submit" value="Send">
-        </form>
+        <h1>Bitcoin price index</h1>
+        <div id="container"></div>
          <script src="/jquery/dist/jquery.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.highcharts.com/stock/highstock.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.min.js"></script>
+        <script src="https://code.highcharts.com/modules/series-label.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/modules/export-data.js"></script>
     </body>
 </html>
 
@@ -22,12 +23,65 @@
  });
 
   socket.on('broad', function(data) {
-         $('#future').append(data+ "<br/>");
-   });
+        data = JSON.parse(data);
+        var series0 = $("#container").highcharts().series[0];
+        var series1 = $("#container").highcharts().series[1];
+        var series2 = $("#container").highcharts().series[1];
+        var x = (new Date()).getTime(); // current time
+        series0.addPoint([x, _.find(data.bpi, {"code":"USD"}).rate_float + Math.random()], true, true);
+        series1.addPoint([x, _.find(data.bpi, {"code":"GBP"}).rate_float + Math.random()], true, true);
+        series2.addPoint([x, _.find(data.bpi, {"code":"EUR"}).rate_float + Math.random()], true, true);
+  });
+   document.addEventListener("DOMContentLoaded", function(event) {
+    socket.emit('messages', 'Im ready');
+    chart = Highcharts.stockChart('container', {
+    time: {
+        useUTC: true
+    },
+    rangeSelector: {
+        buttons: [{
+            count: 1,
+            type: 'minute',
+            text: '1M'
+        }, {
+            count: 5,
+            type: 'minute',
+            text: '5M'
+        }],
+        inputEnabled: true,
+        selected: 1
+    },
+    title: {
+        text: 'Bitcoin Price Index'
+    },
+    exporting: {
+        enabled: false
+    },
+    yAxis: {
+        min: 0,
+        max: 12000,
+    },
+    xAxis: {
+        min: 2017,
+        max: 2018,
+    },
+    series: [{
+        name: 'USD',
+        data: (function () {
+            return [(new Date()).getTime(), 60];
+        }())
+    },{
+        name: 'GBP',
+        data: (function () {
+            return [(new Date()).getTime(), 60];
+        }())
+    },{
+        name: 'EUR',
+        data: (function () {
+            return [(new Date()).getTime(), 60];
+        }())
+    }]
+});
+  });
 
- $('form').submit(function(e){
-     e.preventDefault();
-     var message = $('#chat_input').val();
-     socket.emit('messages', message);
- });
 </script>
