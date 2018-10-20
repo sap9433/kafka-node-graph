@@ -26,7 +26,6 @@
         data = JSON.parse(data);
         var series0 = $("#container").highcharts().series[0];
         var series1 = $("#container").highcharts().series[1];
-        var series2 = $("#container").highcharts().series[1];
         var x = (new Date()).getTime(); // current time
         series0.addPoint([x, _.find(data.bpi, {"code":"USD"}).rate_float + Math.random()], true, true);
         series1.addPoint([x, _.find(data.bpi, {"code":"GBP"}).rate_float + Math.random()], true, true);
@@ -59,11 +58,13 @@
             value: 0,
             width: 1,
             color: '#808080'
-        },{
+        }
+        ,{
             value: 1,
             width: 1,
             color: '#FF6347'
-        }]
+        }
+        ]
     },
     tooltip: {
         headerFormat: '<b>{series.name}</b><br/>',
@@ -78,10 +79,12 @@
     series: [{
         name: 'USD',
         data: [(new Date()).getTime(), 0]
-    },{
+    }
+    ,{
         name: 'GBP',
         data: [(new Date()).getTime(), 0]
-    }]
+    }
+    ]
     });  
   });
 

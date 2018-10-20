@@ -6,9 +6,9 @@ var Producer = kafka.Producer,
     producer.on('ready', function () {
     console.log('Producer is ready');
         data = {"bpi":{"USD":{"code":"USD","rate_float":6420.5275},"GBP":{"code":"GBP","rate_float":4911.6714}}}
-
+        //data = ajax.get('https://api.coindesk.com/v1/bpi/currentprice.json');
         setInterval(function(){
-            let copy = data;
+            let copy = JSON.parse(JSON.stringify(data));
             copy.bpi.USD.rate_float = copy.bpi.USD.rate_float + Math.random()*100;
             copy.bpi.GBP.rate_float = copy.bpi.GBP.rate_float + Math.random()*100
             payloads = [
