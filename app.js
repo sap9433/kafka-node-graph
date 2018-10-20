@@ -26,15 +26,13 @@ io.on('connection', function(client) {
 	        console.log(data);
 	});
 
-	consumer.on('message', function (message) {
-		console.log('consumer message');
-    	console.log(message);
-	});
 
     client.on('messages', function(data) {
 		consumer.on('message', function (message) {
-			client.broadcast.emit('broad',data);
-   			client.emit('broad', data);
+			val = message.value
+			console.log(val);
+			client.broadcast.emit('broad',val);
+   			client.emit('broad', val);
 		});
     });
 })
