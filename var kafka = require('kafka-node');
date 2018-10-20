@@ -1,0 +1,9 @@
+var kafka = require('kafka-node');
+
+let client = new kafka.Client('34.222.138.201:2181', '34.222.138.201:9092', {
+    sessionTimeout: 300,
+    spinDelay: 100,
+    retries: 2
+});
+
+console.log(2)
